@@ -1,6 +1,5 @@
 const fb = require('express').Router();
 const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
-const uuid = require('../helpers/uuid');
 
 // GET Route for retrieving all the feedback
 fb.get('/', (req, res) => {
@@ -10,18 +9,17 @@ readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
 // POST Route for submitting feedback
 fb.post('/', (req, res) => {
 console.log('post');
-const { email, feedbackType, feedback } = req.body;
+const { title, text} = req.body;
 
 // If all the required properties are present
-if (email && feedbackType && feedback) {
+if (title && text) {
   // Variable for the object we will save
-  const newFeedback = {
-    email,
-    feedbackType,
-    feedback,
-    feedback_id: uuid(),
+  const newNote = {
+    title,
+    text,
   };
-  readAndAppend(newFeedback, './db/feedback.json');
+  readAndAppend(newNote, './db/db.json');
+  res.json(`Tip added successfully 🚀`);
 }
 });
 
